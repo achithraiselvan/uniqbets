@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { View, StyleSheet, TouchableOpacity, Text, ScrollView } from 'react-native';
+import { View, StyleSheet, TouchableOpacity, Text, ScrollView, Alert } from 'react-native';
+import NetInfo from '@react-native-community/netinfo';
 import SplashScreen from './components/SplashScreen';
 import HorizontalMenu from './components/HorizontalMenu';
 import Loader from './components/Loader';
@@ -21,6 +22,7 @@ function App() {
   const [activeButton, setActiveButton] = useState('button1');
   const [prediction, setPrediction] = useState([]);
   const [noPredictionMessage, setNoPredictionMessage] = useState('');
+  const [isConnected, setIsConnected] = useState(true);
 
   const checkNotificationPermission = async () => {
     try {
@@ -100,6 +102,9 @@ function App() {
       } else {
         console.error(error);
         // Handle the error here
+        if (!isConnected) {
+          showRetryAlert('Failed to fetch categories. Please check your internet connection and try again.');
+        }
       }
     } finally {
       // Set loading state to false after the API call is completed
@@ -127,6 +132,9 @@ function App() {
       } else {
         console.error(error);
         // Handle the error here
+        if (!isConnected) {
+          showRetryAlert('Failed to fetch our bettings. Please check your internet connection and try again.');
+        }
       }
     } finally {
       // Set loading state to false after the API call is completed
@@ -135,11 +143,19 @@ function App() {
   };
 
   useEffect(() => {
+    const unsubscribe = NetInfo.addEventListener((state) => {
+      setIsConnected(state.isConnected);
+    });
+
     checkNotificationPermission();
     token();
 
     subscribeToTopic('TestTopic');
     getCategory();
+
+    return () => {
+      unsubscribe(); // Unsubscribe from NetInfo event listener when the component unmounts
+    };
   }, []);
 
   const handleMenuSelect = async (menuId) => {
@@ -179,6 +195,9 @@ function App() {
         } else {
           console.error(error);
           // Handle the error here
+          if (!isConnected) {
+            showRetryAlert('Failed to fetch predictions. Please check your internet connection and try again.');
+          }
         }
       } finally {
         // Set loading state to false after the API call is completed
@@ -197,6 +216,9 @@ function App() {
 
   return (
     <View style={styles.container}>
+      {!isConnected && (
+        <Text style={styles.offlineText}>You are currently offline. Please check your internet connection.</Text>
+      )}
       {isLoading ? (
         <SplashScreen />
       ) : (
@@ -312,6 +334,12 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     color: '#FFFFFF',
     marginTop: 20,
+  },
+  offlineText: {
+    color: '#FFFFFF',
+    textAlign: 'center',
+    padding: 10,
+    backgroundColor: '#FF0000',
   },
 });
 
