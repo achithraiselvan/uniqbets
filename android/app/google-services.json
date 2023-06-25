@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "320197670199",
+    "project_id": "uniqbets-d551b",
+    "storage_bucket": "uniqbets-d551b.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:320197670199:android:74cd58a653d230b2dd56b2",
+        "android_client_info": {
+          "package_name": "com.uniqbets"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "320197670199-g27hcg9935f7397qkpn0b1b42eg0o9td.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAG_0zi51o99x_v1sowUsMz1HlbKXlOVUk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "320197670199-g27hcg9935f7397qkpn0b1b42eg0o9td.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
